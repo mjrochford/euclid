@@ -1,20 +1,20 @@
 .PHONY: all run
 
-PROGRAMS = euclid_c euclid_rs euclid_go euclid_c_fast euclid_rs_fast euclid_c_recursive euclid_py euclid_builtin_py euclid_js euclid_sh
+COMPILED = euclid_c euclid_rs euclid_go euclid_zig
+ALL = euclid_c euclid_rs euclid_go euclid_c_fast euclid_rs_fast euclid_c_recursive euclid_py euclid_builtin_py euclid_js euclid_sh euclid_zig
 
+PROGRAMS = ${COMPILED}
 all: ${PROGRAMS}
 
+N_ITERATIONS = 1000
 bench: all
-	@./bench.sh "./euclid_c" 1000
-	@./bench.sh "./euclid_c_fast" 1000
-	@./bench.sh "./euclid_c_recursive" 1000
-	@./bench.sh "./euclid_rs" 1000
-	@./bench.sh "./euclid_rs_fast" 1000
-	@./bench.sh "./euclid_go" 1000
-	@./bench.sh "./euclid_py" 100
-	@./bench.sh "./euclid_builtin_py" 100
-	@./bench.sh "./euclid_js" 100
-	@./bench.sh "./euclid_sh" 1000
+	@for prog in ${PROGRAMS}; do	\
+		./bench.sh ./$$prog ${N_ITERATIONS};\
+	done
+
+euclid_zig: euclid.zig
+	zig build-exe $^
+	@mv euclid $@
 
 euclid_c_recursive: euclid-recursive.c
 	clang $^ -o $@
@@ -56,4 +56,4 @@ euclid_sh: euclid.sh
 	@chmod +x $@
 
 clean:
-	rm ${PROGRAMS}
+	rm -rf zig-cache ${ALL}
