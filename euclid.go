@@ -25,6 +25,12 @@ func assert(condition bool) {
 }
 
 func gcd_euclid(a int, b int) int {
+	if a < b {
+		temp := a
+		a = b
+		b = temp
+	}
+
 	for b != 0 {
 		temp := b
 		b = a % b

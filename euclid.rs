@@ -12,6 +12,10 @@ fn main() {
 }
 
 fn gcd_euclid(mut a: isize, mut b: isize) -> isize {
+    if a < b {
+        std::mem::swap(&mut a, &mut b);
+    }
+
     while b != 0 {
         let temp = b;
         b = a % b;
