@@ -66,4 +66,4 @@ euclid_sh: euclid.sh
 	@chmod +x $@
 
 clean:
-	rm -rf zig-cache ${ALL}
+	rm -rf *.o *.hi zig-cache ${ALL}
