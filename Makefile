@@ -1,9 +1,16 @@
 .PHONY: all run
 
-COMPILED = euclid_c euclid_rs euclid_go euclid_zig
-ALL = euclid_c euclid_rs euclid_go euclid_c_fast euclid_rs_fast euclid_c_recursive euclid_py euclid_builtin_py euclid_js euclid_sh euclid_zig
+COMPILED = euclid_c euclid_rs euclid_go euclid_zig euclid_hs
+INTERPRETED = euclid_py euclid_builtin_py euclid_js euclid_sh
+OPTIONS = euclid_c_fast euclid_rs_fast euclid_c_recursive 
+ALL = ${COMPILED} ${INTERPRETED} ${OPTIONS}
 
-PROGRAMS = ${COMPILED}
+ifndef programs
+PROGRAMS = ${ALL}
+else
+PROGRAMS = ${programs}
+endif
+
 all: ${PROGRAMS}
 
 N_ITERATIONS = 1000
@@ -12,8 +19,11 @@ bench: all
 		./bench.sh ./$$prog ${N_ITERATIONS};\
 	done
 
+euclid_hs: euclid.hs
+	stack ghc -- -o $@ $^
+
 euclid_zig: euclid.zig
-	zig build-exe $^
+	zig build-exe $^ -O ReleaseFast
 	@mv euclid $@
 
 euclid_c_recursive: euclid-recursive.c
@@ -23,7 +33,7 @@ euclid_c_fast: euclid.c
 	clang $^ -o $@ -Ofast
 
 euclid_c: euclid.c
-	clang $^ -o $@
+	clang $^ -o $@ -g
 
 euclid_rs_fast: euclid.rs
 	rustc $^ -o $@ -O
