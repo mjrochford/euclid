@@ -1,2 +1,5 @@
 euclid_*
 /zig-cache
+/.ccls-cache
+*.o
+*.hi
