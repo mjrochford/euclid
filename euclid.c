@@ -1,7 +1,9 @@
-#include <assert.h>
 #include <stdio.h>
 
 int gcd_euclid(int a, int b);
+
+#define assert(cond) \
+    do { if (!(cond)) { return 1; } } while(0)
 
 int main()
 {
